@@ -4,7 +4,7 @@
 #SBATCH --job-name=bwa_index   
 #SBATCH --mem=16G                
 #SBATCH --partition=orion
-#SBATCH --mail-user=nguyen.thanh.dat@nmbu.no
+#SBATCH --mail-user=n.dat@outlook.com
 #SBATCH --mail-type=ALL
 
 
