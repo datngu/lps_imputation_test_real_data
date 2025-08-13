@@ -19,7 +19,7 @@ export NXF_SINGULARITY_CACHEDIR=/mnt/users/ngda/sofware/singularity
 
 nextflow run bam2vcf.nf \
     -w 'work_bam2vcf' \
-    --bam '/mnt/ScratchProjects/Aqua-Faang/dat_projects/lps_imputation/results/dedup_sorted_bam/*.bam{,.bai}' \
+    --bam '/mnt/ScratchProjects/Aqua-Faang/dat_projects/test_real_data/results/dedup_sorted_bam/*.bam{,.bai}' \
     --ref_vcf '/mnt/ScratchProjects/Aqua-Faang/dat_projects/igsr_data/ref_for_120/*.vcf.gz{,.csi}' \
     -resume \
     -profile cluster \
