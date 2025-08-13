@@ -6,20 +6,28 @@ import subprocess
 import random
 
 
+## hope to able reproduce the sampling ??
+SEED = 2024
+random.seed(SEED)
+
+
 ## set similar to https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8015847/
 GENOME_SIZE = 3.3e9
 ## Standard deviation when doing lowpass sequencing
-## Emperically computed from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8015847/
-SD_COV_0_5X = 0.2314565
-SD_COV_1X = 0.2138574
-SD_COV = (SD_COV_0_5X + SD_COV_1X) /2
+SD_COV = 0.1
+## min coverage, avoid too slow coverage
+MIN_COV = 0.1
 ## read length, 1000 NYGC dataset is 150bp
 READ_LENGTH = 150
+DUPLICATED_RATE = 0.09 ### pick from NYGC 1KGP HC paper (Cell - 2022)
+## https://www.sciencedirect.com/science/article/pii/S0092867422009916 
+## The mean duplicate rate across the samples was 9% 
 
-def depth2count(depth):
-    # avoid zero sampling
+def depth2count(normial_depth):
+    depth = (1-DUPLICATED_RATE) * normial_depth
+    # avoid below zero sampling
     ## 1.28 is z-score to exclude values < quantile(0.1) and > quantile(0.9) of the distribution
-    min_cut = max(0.1, depth - 1.28 * SD_COV)
+    min_cut = max(MIN_COV, depth - 1.28 * SD_COV)
     max_cut = depth + 1.28 * SD_COV
     ran_depth = random.gauss(depth, SD_COV)
     

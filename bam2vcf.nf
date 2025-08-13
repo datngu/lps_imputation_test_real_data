@@ -29,20 +29,53 @@ workflow {
     BAM_ch = Channel.fromFilePairs(params.bam)
     VCF_ref_ch = Channel.fromFilePairs(params.ref_vcf)
     MAP_ch = Channel.fromPath(params.maps).collect() 
-    
+    BAM_ch.view()
+
     Build_index(VCF_ref_ch, MAP_ch)
 
-    Impute_input_ch = BAM_ch.combine(Build_index.out)
+    Build_index.out.view()
+    
+    //Impute_input_ch = BAM_ch.combine(Build_index.out)
 
-    IMPUTE_glimpse2(Impute_input_ch)
+    //IMPUTE_glimpse2(Impute_input_ch)
 
-    IMPUTE_result_ch = IMPUTE_glimpse2.out.groupTuple().map{it -> [it[0], it[1].flatten()]}
+    //IMPUTE_result_ch = IMPUTE_glimpse2.out.groupTuple().map{it -> [it[0], it[1].flatten()]}
     //IMPUTE_result_ch.view()
-    JOIN_vcfs(IMPUTE_result_ch)
+    //JOIN_vcfs(IMPUTE_result_ch)
     //Build_index.out.view()
 }
 
 
+process Bam2Vcf {
+
+    publishDir "${params.outdir}", mode: 'copy', overwrite: true
+
+    input:
+    path all_bam
+    path all_bam_idx
+    path all_index
+    tuple val(i), val(lps_cov)
+
+    cpus 6
+    memory '32GB'
+    maxForks 30
+
+    output:
+    path "*imputed.vcf.gz"
+
+    script:
+    """
+    ls *${lps_cov}.bam > run_bam_list.txt
+
+
+    run_imputation_bam_list.sh \
+        run_bam_list.txt \
+        chr${i} \
+        chr${i}_${lps_cov}_imputed.vcf.gz \
+        ${task.cpus}
+        
+    """
+}
 
 
 process JOIN_vcfs {
@@ -113,7 +146,7 @@ process Build_index {
     script:
     """
     buid_ref.sh ${vcf[0]} ${chr} ${chr}.b38.gmap.gz ${chr}_idx ${task.cpus}
-
+    
     """
 }
 

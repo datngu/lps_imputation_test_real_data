@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e  # Exit immediately if any command fails
+
 # Help message function
 function display_help {
     echo "Usage: $0 BAM_FILE CHR OUT_DIR [CORES] [REF_PREFIX]"
@@ -51,6 +53,7 @@ do
 	GLIMPSE2_phase_static --bam-file ${BAM} \
         --reference ${REF_PREFIX}_${CHR}_${REGS}_${REGE}.bin \
         --output ${TEM_PREFIX}_${CHR}_${REGS}_${REGE}_tempo.bcf \
+        --keep-monomorphic-ref-sites \
         --threads ${CORES}
 done < chunks.${CHR}.txt
 
@@ -63,3 +66,4 @@ ls -1v ${TEM_PREFIX}*_tempo.bcf > ${LST}
 GLIMPSE2_ligate_static --input ${LST} --output ${OUT}
 
 rm ${TEM_PREFIX}*_tempo*
+rm $LST

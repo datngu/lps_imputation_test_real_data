@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e  # Exit immediately if any command fails
+
 # Help message function
 function display_help {
     echo "Usage: $0 VCF CHR MAP OUT_DIR [CORES] [REF_PREFIX]"
@@ -45,7 +47,12 @@ bcftools index -f ${OUT_DIR}/${CHR}.sites.vcf.gz
 ## slipt chunks
 GLIMPSE2_chunk_static --input ${OUT_DIR}/${CHR}.sites.vcf.gz \
     --region ${CHR} \
-    --window-mb 8\
+    --window-cm 8 \
+    --window-mb 10 \
+    --window-count 40000 \
+    --buffer-cm 0.5 \
+    --buffer-mb 0.400000006 \
+    --buffer-count 2000 \
     --output ${OUT_DIR}/chunks.${CHR}.txt \
     --map ${MAP} \
     --sequential
