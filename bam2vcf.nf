@@ -29,32 +29,23 @@ workflow {
     BAM_ch = Channel.fromFilePairs(params.bam)
     VCF_ref_ch = Channel.fromFilePairs(params.ref_vcf)
     MAP_ch = Channel.fromPath(params.maps).collect() 
-    BAM_ch.view()
+    //BAM_ch.view()
 
     Build_index(VCF_ref_ch, MAP_ch)
 
-    Build_index.out.view()
-    
-    //Impute_input_ch = BAM_ch.combine(Build_index.out)
-
-    //IMPUTE_glimpse2(Impute_input_ch)
-
-    //IMPUTE_result_ch = IMPUTE_glimpse2.out.groupTuple().map{it -> [it[0], it[1].flatten()]}
-    //IMPUTE_result_ch.view()
-    //JOIN_vcfs(IMPUTE_result_ch)
     //Build_index.out.view()
+    Bam2Vcf(BAM_ch.collect(), Build_index.out)
+
 }
 
 
 process Bam2Vcf {
 
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
+    publishDir "${params.outdir}/imputed_vcf", mode: 'copy', overwrite: true
 
     input:
     path all_bam
-    path all_bam_idx
-    path all_index
-    tuple val(i), val(lps_cov)
+    tuple val(chr), path(idx_files)
 
     cpus 6
     memory '32GB'
@@ -65,67 +56,17 @@ process Bam2Vcf {
 
     script:
     """
-    ls *${lps_cov}.bam > run_bam_list.txt
+    ls *.bam > run_bam_list.txt
 
 
     run_imputation_bam_list.sh \
         run_bam_list.txt \
-        chr${i} \
-        chr${i}_${lps_cov}_imputed.vcf.gz \
+        ${chr} \
+        ${chr}_imputed.vcf.gz \
         ${task.cpus}
         
     """
 }
-
-
-process JOIN_vcfs {
-
-    publishDir "${params.outdir}/imputed_joined_glimpse2", mode: 'copy', overwrite: true
-
-    input:
-    tuple val(chr), path(vcfs)
-
-    cpus 1
-    memory '32GB'
-
-    output:
-    tuple path("${chr}_imputed.vcf.gz"), path("${chr}_imputed.vcf.gz.csi")
-
-
-    script:
-    """
-    bcftools merge *${chr}.vcf.gz -Oz -o "${chr}_imputed.vcf.gz"
-    bcftools index "${chr}_imputed.vcf.gz"
-
-    """
-}
-
-
-process IMPUTE_glimpse2 {
-
-    publishDir "${params.trace_dir}/imputed_glimpse2", mode: 'symlink', overwrite: true
-
-    input:
-    tuple val(sample_id), path(bam), val(chr), path(idx_files)
-
-    cpus 4
-    memory '32GB'
-
-    output:
-    tuple val(chr), path("${sample_id}.${chr}.vcf.*")
-
-
-    script:
-    """
-    run_imputation.sh \
-        ${bam[0]} \
-        ${chr} \
-        ${sample_id}.${chr}.vcf.gz \
-        ${task.cpus}
-
-    """
-}
-
 
 
 process Build_index {
