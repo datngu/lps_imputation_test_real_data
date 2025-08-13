@@ -26,14 +26,17 @@ nextflow.enable.dsl=2
 
 workflow {
 
-    BAM_ch = Channel.fromFilePairs(params.bam)
+    //BAM_ch = Channel.fromFilePairs(params.bam)
     VCF_ref_ch = Channel.fromFilePairs(params.ref_vcf)
     MAP_ch = Channel.fromPath(params.maps).collect() 
-    //BAM_ch.view()
+    BAM_all_ch = Channel.fromFilePairs(params.bam)
+    .map { id, files -> files }   // grab all files in each pair
+    .flatten()
 
     Build_index(VCF_ref_ch, MAP_ch)
-
+    
     //Build_index.out.view()
+    BAM_all_ch.view()
     Bam2Vcf(BAM_ch.collect(), Build_index.out)
 
 }
