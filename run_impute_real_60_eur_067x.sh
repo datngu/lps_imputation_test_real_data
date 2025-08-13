@@ -3,8 +3,7 @@
 #SBATCH --nodes=1                
 #SBATCH --job-name=imp_real067   
 #SBATCH --mem=4G                
-#SBATCH --partition=gpu
-#SBATCH --mail-user=nguyen.thanh.dat@nmbu.no
+#SBATCH --mail-user=n.dat@outlook.com
 #SBATCH --mail-type=ALL
 
 
