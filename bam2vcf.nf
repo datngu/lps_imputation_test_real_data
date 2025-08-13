@@ -37,7 +37,7 @@ workflow {
     
     //Build_index.out.view()
     BAM_all_ch.view()
-    Bam2Vcf(BAM_ch.collect(), Build_index.out)
+    Bam2Vcf(BAM_all_ch, Build_index.out)
 
 }
 
