@@ -81,7 +81,7 @@ process Sample2BAM {
 
 process DownSampling {
 
-    publishDir "${params.trace_dir}/lowpass_bam_files", mode: 'symlink', overwrite: true
+    publishDir "${params.trace_dir}/lps_067x", mode: 'copy', overwrite: true
 
     input:
     tuple val(sample_id), val(read_count), path(bam_file)
@@ -97,7 +97,7 @@ process DownSampling {
 
     bam_sampling.py --bam ${sample_id}.bam \
         --depth 0.67 \
-        --out ${sample_id}_0.67_lps.bam \
+        --out ${sample_id}.bam \
         --bam_size ${read_count}
 
     """
