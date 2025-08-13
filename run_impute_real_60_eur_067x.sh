@@ -9,7 +9,8 @@
 
 module load BCFtools/1.10.2-GCC-8.3.0
 module load git/2.23.0-GCCcore-9.3.0-nodocs
-module load Nextflow/24.04.2
+#module load Nextflow/21.03
+module load nextflow/20.10.0
 module load singularity/rpm
 
 
