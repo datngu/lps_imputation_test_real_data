@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --ntasks=1
 #SBATCH --nodes=1                
-#SBATCH --job-name=bwa_real_60_eur_067x 
+#SBATCH --job-name=simulae_60_eur_067x 
 #SBATCH --mem=4G                
 #SBATCH --mail-user=n.dat@outlook.com
 #SBATCH --mail-type=ALL
