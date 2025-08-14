@@ -43,7 +43,7 @@ process Sample2BAM {
     path genome
 
     cpus 1
-    memory '8GB'
+    memory '16GB'
 
     output:
 
