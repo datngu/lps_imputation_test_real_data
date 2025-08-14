@@ -85,7 +85,7 @@ process Sample2BAM {
 
 process DownSampling {
 
-    publishDir "${params.trace_dir}/lps_067x", mode: 'copy', overwrite: true
+    publishDir "${params.outdir}/lps_067x", mode: 'copy', overwrite: true
 
     input:
     tuple val(sample_id), val(read_count), path(bam_file)
@@ -107,3 +107,26 @@ process DownSampling {
     """
 }
 
+process Bam_idx {
+
+    publishDir "${params.outdir}/lps_067x", mode: 'copy', overwrite: true
+
+    input:
+    path bam_files
+
+    cpus 1
+    memory '32GB'
+
+    output:
+    path "*_lps.bam.bai"
+
+
+    script:
+    """
+
+    for bam_file in \$(ls *.bam); do
+        samtools index \$bam_file
+    done
+
+    """
+}
