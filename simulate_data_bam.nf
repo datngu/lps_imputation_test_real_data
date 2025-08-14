@@ -32,6 +32,8 @@ workflow {
     Sample2BAM(samplesChannel, params.genome)
 
     DownSampling(Sample2BAM.out)
+
+    Bam_idx(DownSampling.out)
 }
 
 process Sample2BAM {
