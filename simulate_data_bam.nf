@@ -117,7 +117,7 @@ process Bam_idx {
     path bam_files
 
     cpus 1
-    memory '32GB'
+    memory '4GB'
 
     output:
     path "*_lps.bam.bai"
