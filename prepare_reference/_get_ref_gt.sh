@@ -4,7 +4,6 @@
 #SBATCH --job-name=slipt_ref   
 #SBATCH --mem=16G                
 #SBATCH --partition=orion
-#SBATCH --mail-user=nguyen.thanh.dat@nmbu.no
 #SBATCH --mail-type=ALL
 
 

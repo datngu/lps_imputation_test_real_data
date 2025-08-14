@@ -52,6 +52,10 @@ process Sample2BAM {
     script:
     """
 
+    ## index the genome
+
+    samtools faidx ${genome}
+    
     ## try 5 times
 
     for ((i=1; i<=5; i++)); do
@@ -97,7 +101,7 @@ process DownSampling {
 
     bam_sampling.py --bam ${sample_id}.bam \
         --depth 0.67 \
-        --out ${sample_id}.bam \
+        --out ${sample_id}_0.67_lps.bam \
         --bam_size ${read_count}
 
     """

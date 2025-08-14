@@ -4,18 +4,9 @@
 #SBATCH --job-name=download   
 #SBATCH --mem=16G                
 #SBATCH --partition=orion
-#SBATCH --mail-user=nguyen.thanh.dat@nmbu.no
 #SBATCH --mail-type=ALL
 
 
-#!/bin/bash
-#SBATCH --ntasks=4
-#SBATCH --nodes=1                
-#SBATCH --job-name=slipt_ref   
-#SBATCH --mem=16G                
-#SBATCH --partition=orion
-#SBATCH --mail-user=nguyen.thanh.dat@nmbu.no
-#SBATCH --mail-type=ALL
 
 
 download_vcf(){
