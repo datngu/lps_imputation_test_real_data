@@ -18,9 +18,9 @@ export NXF_SINGULARITY_CACHEDIR=/mnt/users/ngda/sofware/singularity
 
 
 nextflow run simulate_data_bam.nf \
-    -w 'simulate_bam_60_eur_067x' \
+    -w 'bam_60_eur_067x' \
     --metadata 'meta_data/eur_rep1_high_coverage_info.csv' \
-    --genome '/mnt/users/ngda/genomes/human_igsr/genome.fa' \
+    --genome '/mnt/users/ngda/genomes/human_igsr/hg38.fa' \
     -resume \
     -profile cluster \
 
